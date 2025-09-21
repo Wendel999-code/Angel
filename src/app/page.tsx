@@ -68,14 +68,26 @@ function Angel() {
   };
 
   const FloatingHearts = () => {
+    const [hearts, setHearts] = useState<{ x: number; size: number }[]>([]);
+
+    useEffect(() => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const newHearts = [...Array(6)].map(() => ({
+        x: Math.random() * width,
+        size: 20 + Math.random() * 15,
+      }));
+      setHearts(newHearts);
+    }, []);
+
     return (
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        {[...Array(6)].map((_, i) => (
+        {hearts.map((heart, i) => (
           <motion.div
             key={i}
             className="absolute text-pink-200 opacity-20"
             initial={{
-              x: Math.random() * window.innerWidth,
+              x: heart.x,
               y: window.innerHeight + 50,
               rotate: 0,
             }}
@@ -91,7 +103,7 @@ function Angel() {
               ease: "linear",
             }}
           >
-            <Heart size={20 + Math.random() * 15} fill="currentColor" />
+            <Heart size={heart.size} fill="currentColor" />
           </motion.div>
         ))}
       </div>
